@@ -1,0 +1,242 @@
+import pygame
+import math as m
+import pygame.freetype
+from pygame.draw import *
+from random import randint
+pygame.init()
+pygame.font.init()
+clock = pygame.time.Clock()
+black = (0, 0, 0)
+screen = pygame.display.set_mode((1200, 600))
+
+GAME_FONT = pygame.freetype.Font(None, 20)
+GAME_FONT_1 = pygame.freetype.Font(None, 36)
+#def cube_start(size, cx, cy, cz): # making first object, cx, cy, cz - coordinates of the center
+    #cube_0[0] = (size + cx, size + cy, size + cz)
+    #cube_0[1] = (-size + cx, size + cy, size + cz)
+    #cube_0[2] = (-size + cx, -size + cy, size + cz)
+    #cube_0[3] = (size + cx, -size + cy, size + cz)
+    #cube_0[4] = (size + cx, size + cy, -size + cz) 
+    #cube_0[5] = (-size + cx, size + cy, -size + cz)
+    #cube_0[6] = (-size + cx, -size + cy, -size + cz) 
+    #cube_0[7] = (size + cx, -size + cy, -size + cz)
+#def hero(hx, hy, hz, cx, cy, cz, lx, ly, lz):
+#    0
+#def screen(alpha):
+    
+
+    
+#def alpha(hx, hy, hz, cx, cy, cz, lx, ly, lz):
+#    a = m.acos(((cx-hx)*lx + (cy-hy)*ly + (cz-hz)*lz)/((((cx-hx)**2 + (cy-hy)**2 + (cz-hz)**2)**2)*(l)))
+#    return a
+r = 0
+l = 600
+rad = 100
+
+x_0 = 0
+y_0 = 0
+z_0 = 1000#800*(3**0.5)
+x_0 = 0#800
+
+global n_dot
+n_dot = 16
+
+al = 0
+be = 0
+#arr0 = [(r, m.pi/3, m.pi/4),(r, m.pi/3, -m.pi/4),(r, -m.pi/3, -m.pi/4),(r, -m.pi/3, m.pi/4)]
+
+
+def out_scr(r, alpha, beta):
+    alpha += 0#al #= turn_alpha(alpha, al)
+    beta += 0#be #= turn_beta(beta, be)
+    
+    k = 1800/m.pi
+    size_3 = 1
+    #x = l*(m.sin(beta)*m.cos(alpha))/(m.sin(beta)*m.sin(alpha)) + 600
+    #y = l*(m.cos(beta))/(m.sin(beta)*m.sin(alpha)) + 300
+    GAME_FONT_1.render_to(screen, (1100,550), f"alpha: {alpha}, beta: {beta}", (255, 255, 255))
+    x = size_3 * k * alpha - 1200
+    y = size_3 * k * beta - 600
+    
+    disp = (x, y)
+
+    return disp
+    
+    
+
+k = 0
+finished = False
+
+def turn_alpha(alpha_0, alpha_t):
+    alpha_0 += alpha_t
+    return alpha_0
+def turn_beta(beta_0, beta_t):
+    beta_0 += beta_t
+    return beta_0
+"""
+def rotate_a(alpha, b):
+    for numb in range(8):
+        b[numb][0] = b[numb][0]*m.sin(al) 
+        b[numb][2] = b[numb][2]*m.cos(al) 
+
+def rotate_b():
+    for numb in range(8):
+        b[numb][1] = b[numb][1]*m.sin(be) 
+        b[numb][2] = b[numb][2]*m.cos(be) 
+"""
+
+
+def pol_cor_r(x, y, z): # y - alpha, z - beta
+    r = (x**2 + y**2 + z**2)**0.5
+    return r
+
+def pol_cor_alpha(x, y, z): # y - alpha, z - beta
+    if x == 0:
+        alpha = m.pi/2 
+        pass
+    else:
+        alpha = m.atan(z/x)  
+        if alpha < 0:
+            alpha += m.pi
+    return alpha
+
+def pol_cor_beta(x, y, z): # y - alpha, z - beta
+    beta = m.acos(y/((x**2 + y**2 + z**2)**0.5))
+    return beta
+
+def make_x(t):
+    x = rad*m.sin(t)
+    return x
+def make_z(t):
+    z = rad*m.cos(t)
+    return z
+rot = 0
+t = 0#m.pi/4 + rot
+ang = 0
+while not finished:
+    clock.tick(30)
+
+
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_p:
+                finished = True
+            if event.key == pygame.K_w:
+                z_0 -= 100
+            if event.key == pygame.K_s:
+                z_0 += 100
+            if event.key == pygame.K_d:
+                x_0 -= 100
+            if event.key == pygame.K_a:
+                x_0 += 100
+            if event.key == pygame.K_r:
+                y_0 -= 100
+            if event.key == pygame.K_f:
+                y_0 += 100    
+           
+        if event.type == pygame.MOUSEMOTION:
+            global pos
+            pos = event.pos 
+            pygame.mouse.set_pos = (600, 300)
+            k = 0.002
+           
+            al = k*(pos[0] - 600)
+            be = k*(pos[1] - 300)    
+            
+		
+
+
+
+
+
+
+
+    global b, alpha_arr, beta_arr
+    b = [0]*8
+    
+    r = [0]*8
+    c = [0]*8
+    alpha_arr = [0]*8
+    beta_arr = [0]*8
+    
+    b[0] = (make_x(t) + x_0, y_0 + 100, make_z(t) + z_0)
+    b[1] = (make_x(t + m.pi/2) + x_0, y_0 + 100, make_z(t + m.pi/2) + z_0)
+    b[2] = (make_x(t + m.pi) + x_0, y_0 + 100, make_z(t + m.pi) + z_0)
+    b[3] = (make_x(t + 3*m.pi/2) + x_0, y_0 + 100, make_z(t + 3*m.pi/2) + z_0)
+    
+    b[4] = (make_x(t) + x_0, y_0 - 100, make_z(t) + z_0)
+    b[5] = (make_x(t + m.pi/2) + x_0, y_0 - 100, make_z(t + m.pi/2) + z_0)
+    b[6] = (make_x(t + m.pi) + x_0, y_0 - 100, make_z(t + m.pi) + z_0)
+    b[7] = (make_x(t + 3*m.pi/2) + x_0, y_0 - 100, make_z(t + 3*m.pi/2) + z_0)
+    #b[8] = (1000, -100, 0)
+    
+    d = [0]*4
+
+    
+    main_arr = [b,]
+
+    i = 0
+    
+    while i < 8:
+        d = b[i]
+        r[i] = pol_cor_r(d[0], d[1], d[2])
+        alpha_arr[i] = pol_cor_alpha(d[0], d[1], d[2])
+        beta_arr[i] = pol_cor_beta(d[0], d[1], d[2])
+        c[i] = out_scr(r[i], alpha_arr[i], beta_arr[i])
+        i += 1
+
+
+
+     
+    
+
+    polygon(screen, (255, 0, 0), [(100,100), (200,100), (200,200), (100,200)], 2)
+    #polygon(screen, (255, 0, 0), [c[0], c[1], (0,0), (0,200)], 2)
+    #polygon(screen, (255, 0, 0), [(1200,0), (1200,200), c[2], c[3]], 2)
+    
+    polygon(screen, (255, 255, 255), [c[0], c[1], c[2], c[3]], 2)
+    polygon(screen, (255, 255, 255), [c[4], c[5], c[6], c[7]], 2)
+    
+    polygon(screen, (255, 255, 255), [c[0], c[1], c[5], c[4]], 2)
+    polygon(screen, (255, 255, 255), [c[2], c[3], c[7], c[6]], 2)
+
+    polygon(screen, (255, 0, 0), [c[0], c[3], c[7], c[4]], 2)
+    polygon(screen, (255, 255, 255), [c[1], c[2], c[6], c[5]], 2)
+    #FIXME:
+    q = [0]*8
+    for sln in range(8):
+
+        q[sln] = [0]*2
+    for sln in range(8):
+        q[sln][0] = (c[sln][0] + 10)//1
+        q[sln][1] = (c[sln][1] + 10)//1
+        a_0 = b[sln][0]//1
+        a_1 = b[sln][1]//1
+        a_2 = b[sln][2]//1
+        GAME_FONT.render_to(screen, (1000, 10 + 30 * sln ), f"{alpha_arr[sln]*180/m.pi//1}, {beta_arr[sln]*180/m.pi//1}", (255, 255, 255))
+        GAME_FONT.render_to(screen, (10, 10 + 30 * sln ), f"{c[sln][0]//1}, {c[sln][1]//1}", (255, 255, 255))
+    p0 = pos[0]
+    p1 = pos[1]
+    GAME_FONT_1.render_to(screen, (10,550), f"{p0}, {p1}", (255, 255, 255))
+
+
+
+
+
+
+
+    white = (255,255,255)
+    aaline(screen, white, [0, 400], [1200, 400])
+
+
+    
+    
+    pygame.display.update()
+    black = (0,0,0)
+    screen.fill(black)
+
+    t += 0.05
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            finished = True
+pygame.quit()
