@@ -314,7 +314,7 @@ while not finished:
     p0 = pos[0]
     p1 = pos[1]
     GAME_FONT_1.render_to(screen, (10,550), f"{p0}, {p1}", (255, 255, 255))
-
+    GAME_FONT_1.render_to(screen, (400, 550), "Print P to exit", (255, 255, 255))
 
 
 
