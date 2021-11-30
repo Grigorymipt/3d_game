@@ -30,7 +30,7 @@ GAME_FONT_1 = pygame.freetype.Font(None, 36)
 #    a = m.acos(((cx-hx)*lx + (cy-hy)*ly + (cz-hz)*lz)/((((cx-hx)**2 + (cy-hy)**2 + (cz-hz)**2)**2)*(l)))
 #    return a
 r = 0
-l = 600
+l = 600*3**0.5
 rad = 100*(2**0.5)
 
 x_0 = 0
@@ -51,8 +51,11 @@ def out_scr(r, alpha, beta):
     alpha += al #= turn_alpha(alpha, al)
     beta += be #= turn_beta(beta, be)
     
-    x = l*(m.sin(beta)*m.cos(alpha))/(m.sin(beta)*m.sin(alpha)) + 600
-    y = l*(m.cos(beta))/(m.sin(beta)*m.sin(alpha)) + 300
+    #x = l*(m.sin(beta)*m.cos(alpha))/(m.sin(beta)*m.sin(alpha)) + 600
+    #y = l*(m.cos(beta))/(m.sin(beta)*m.sin(alpha)) + 300
+    x = l * m.tan(alpha) + 600
+    #lx = l * m.sin(alpha)
+    y = l * m.tan(beta) + 300
     disp = (x, y)
     return disp
 
@@ -90,12 +93,23 @@ def pol_cor_alpha(x, y, z): # y - alpha, z - beta
         alpha = m.atan(z/x)
         if alpha < 0:
             alpha += m.pi
+    alpha = m.asin(x/(z**2 + x**2)**0.5)
     return alpha
 
 def pol_cor_beta(x, y, z): # y - alpha, z - beta
-    beta = m.acos(y/((x**2 + y**2 + z**2)**0.5))
+    #beta = m.acos(y/((x**2 + y**2 + z**2)**0.5)) + m.pi/2
+    beta = m.asin(y/(z**2 + y**2)**0.5)
+    """
+    if y == 0:
+        beta = m.pi/2
+        pass
+    else:
+        beta = m.atan(z/y)
+        if beta < 0:
+            beta += m.pi
     return beta
-
+    """
+    return beta
 def make_x(t):
     x = rad*m.sin(t)
     return x
@@ -138,7 +152,7 @@ while not finished:
             pos = event.pos 
             k = 0.002
             al += k*(pos[0] - 600)
-            be += k*(pos[1] - 300) 
+            be += k*(pos[1] - 300)
             pygame.mouse.set_pos(600,300)
 
 
@@ -229,7 +243,7 @@ while not finished:
         r[i] = pol_cor_r(d[0], d[1], d[2])
         alpha_arr[i] = pol_cor_alpha(d[0], d[1], d[2])
         beta_arr[i] = pol_cor_beta(d[0], d[1], d[2])
-        c[i] = out_scr(r[i], turn_alpha(alpha_arr[i], al), turn_beta(beta_arr[i], be))
+        c[i] = out_scr(r[i], alpha_arr[i], beta_arr[i])
         i += 1
     
     i = 0
@@ -238,7 +252,7 @@ while not finished:
         r[i] = pol_cor_r(d[0], d[1], d[2])
         alpha_arr[i] = pol_cor_alpha(d[0], d[1], d[2])
         beta_arr[i] = pol_cor_beta(d[0], d[1], d[2])
-        c_2[i] = out_scr(r[i], turn_alpha(alpha_arr[i], al), turn_beta(beta_arr[i], be))
+        c_2[i] = out_scr(r[i], alpha_arr[i], beta_arr[i])
         i += 1
     
     i = 0
@@ -247,7 +261,7 @@ while not finished:
         r[i] = pol_cor_r(d[0], d[1], d[2])
         alpha_arr[i] = pol_cor_alpha(d[0], d[1], d[2])
         beta_arr[i] = pol_cor_beta(d[0], d[1], d[2])
-        c_3[i] = out_scr(r[i], turn_alpha(alpha_arr[i], al), turn_beta(beta_arr[i], be))
+        c_3[i] = out_scr(r[i], alpha_arr[i], beta_arr[i])
         i += 1
     i = 0
     while i < 24:
@@ -255,7 +269,7 @@ while not finished:
         r[i] = pol_cor_r(d[0], d[1], d[2])
         alpha_arr[i] = pol_cor_alpha(d[0], d[1], d[2])
         beta_arr[i] = pol_cor_beta(d[0], d[1], d[2])
-        c_4[i] = out_scr(r[i], turn_alpha(alpha_arr[i], al), turn_beta(beta_arr[i], be))
+        c_4[i] = out_scr(r[i], alpha_arr[i], beta_arr[i])
         i += 1
 
 
@@ -263,7 +277,7 @@ while not finished:
 
     #field:
 
-    polygon(screen, (100, 255, 100), [c_2[0], c_2[1], c_2[3], c_2[2]])
+    polygon(screen, (100, 255, 100), [c_2[0], c_2[1], c_2[3], c_2[2]], 2)
     
     polygon(screen, (255, 255, 255), [c_2[0], c_2[2], c_2[6], c_2[4]], 2)
     polygon(screen, (255, 255, 255), [c_2[1], c_2[3], c_2[7], c_2[5]], 2)
