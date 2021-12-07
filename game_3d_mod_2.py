@@ -16,16 +16,16 @@ GAME_FONT_1 = pygame.freetype.Font(None, 36)
     #cube_0[1] = (-size + cx, size + cy, size + cz)
     #cube_0[2] = (-size + cx, -size + cy, size + cz)
     #cube_0[3] = (size + cx, -size + cy, size + cz)
-    #cube_0[4] = (size + cx, size + cy, -size + cz) 
+    #cube_0[4] = (size + cx, size + cy, -size + cz)
     #cube_0[5] = (-size + cx, size + cy, -size + cz)
-    #cube_0[6] = (-size + cx, -size + cy, -size + cz) 
+    #cube_0[6] = (-size + cx, -size + cy, -size + cz)
     #cube_0[7] = (size + cx, -size + cy, -size + cz)
 #def hero(hx, hy, hz, cx, cy, cz, lx, ly, lz):
 #    0
 #def screen(alpha):
-    
 
-    
+
+
 #def alpha(hx, hy, hz, cx, cy, cz, lx, ly, lz):
 #    a = m.acos(((cx-hx)*lx + (cy-hy)*ly + (cz-hz)*lz)/((((cx-hx)**2 + (cy-hy)**2 + (cz-hz)**2)**2)*(l)))
 #    return a
@@ -43,31 +43,25 @@ z_p = 0
 
 global n_dot
 n_dot = 16
-
+global al, be
 al = 0
 be = 0
 #arr0 = [(r, m.pi/3, m.pi/4),(r, m.pi/3, -m.pi/4),(r, -m.pi/3, -m.pi/4),(r, -m.pi/3, m.pi/4)]
 def out_scr(r, alpha, beta):
     alpha += al #= turn_alpha(alpha, al)
     beta += be #= turn_beta(beta, be)
-    
-    #x = l*(m.sin(beta)*m.cos(alpha))/(m.sin(beta)*m.sin(alpha)) + 600
-    #y = l*(m.cos(beta))/(m.sin(beta)*m.sin(alpha)) + 300
-    x = l * m.tan(alpha) + 600
-    #lx = l * m.sin(alpha)
-    y = l * m.tan(beta) + 300
-    disp = (x, y)
+
+    x = l*(m.sin(beta)*m.cos(alpha))/(m.sin(beta)*m.sin(alpha)) + 600
+    y = l*(m.cos(beta))/(m.sin(beta)*m.sin(alpha)) + 300
+    #x = l * m.tan(alpha) + 600
+
+    #y = l * m.tan(beta) + 300
+    disp = [x, y]
     return disp
 
 k = 0
 finished = False
 
-def turn_alpha(alpha_0, alpha_t):
-    alpha_0 += alpha_t
-    return alpha_0
-def turn_beta(beta_0, beta_t):
-    beta_0 += beta_t
-    return beta_0
 """
 def rotate_a(alpha, b):
     for numb in range(8):
@@ -97,8 +91,8 @@ def pol_cor_alpha(x, y, z): # y - alpha, z - beta
     return alpha
 
 def pol_cor_beta(x, y, z): # y - alpha, z - beta
-    #beta = m.acos(y/((x**2 + y**2 + z**2)**0.5)) + m.pi/2
-    beta = m.asin(y/(z**2 + y**2)**0.5)
+    beta = m.asin(y/((x**2 + y**2 + z**2)**0.5)) + m.pi/2
+
     """
     if y == 0:
         beta = m.pi/2
@@ -119,6 +113,7 @@ def make_z(t):
 rot = 0
 t = m.pi/4
 ang = 0
+pygame.mouse.set_pos(600,300)
 while not finished:
     clock.tick(30)
     pygame.mouse.set_visible(False)
@@ -138,18 +133,17 @@ while not finished:
             if event.key == pygame.K_r:
                 y_p -= 100
             if event.key == pygame.K_f:
-                y_p += 100 
-            
-                
-            if event.key == pygame.K_m:   
+                y_p += 100
+
+
+            if event.key == pygame.K_m:
                 pygame.mouse.set_pos(600,300)
-                
 
-
-            
+        global pos
+        pos = [600, 300]
         if event.type == pygame.MOUSEMOTION:
-            global pos
-            pos = event.pos 
+
+            pos = event.pos
             k = 0.002
             al += k*(pos[0] - 600)
             be += k*(pos[1] - 300)
@@ -165,25 +159,25 @@ while not finished:
     global b, alpha_arr, beta_arr
     b = [0]*8
     b_3 = [0]*8
-    
+
     r = [0]*32
     c = [0]*8
     c_2 = [0]*8
     c_3 = [0]*8
     alpha_arr = [0]*32
     beta_arr = [0]*32
-    
+
     b[0] = (make_x(t) + x_0 + x_p, y_0 + 100 + y_p, make_z(t) + z_0 + z_p)
     b[1] = (make_x(t + m.pi/2) + x_0 + x_p, y_0 + 100 + y_p, make_z(t + m.pi/2) + z_0 + z_p)
     b[2] = (make_x(t + m.pi) + x_0 + x_p, y_0 + 100 + y_p, make_z(t + m.pi) + z_0 + z_p)
     b[3] = (make_x(t + 3*m.pi/2) + x_0 + x_p, y_0 + 100 + y_p, make_z(t + 3*m.pi/2) + z_0 + z_p)
-    
+
     b[4] = (make_x(t) + x_0 + x_p, y_0 - 100 + y_p, make_z(t) + z_0 + z_p)
     b[5] = (make_x(t + m.pi/2) + x_0 + x_p, y_0 - 100 + y_p, make_z(t + m.pi/2) + z_0 + z_p)
     b[6] = (make_x(t + m.pi) + x_0 + x_p, y_0 - 100 + y_p, make_z(t + m.pi) + z_0 + z_p)
     b[7] = (make_x(t + 3*m.pi/2) + x_0 + x_p, y_0 - 100 + y_p, make_z(t + 3*m.pi/2) + z_0 + z_p)
     #b[8] = (1000, -100, 0)
-    
+
     b_2 = [0]*8
     b_2[0] = (-1000 + x_p,  0 + y_p, 1000 + z_p)
     b_2[1] = (1000  + x_p,  0 + y_p, 1000 + z_p)
@@ -231,10 +225,10 @@ while not finished:
     b_4[21] = (-500  + x_p, 0 + y_p, 1000 + z_p)
     b_4[22] = (-700 + x_p, 0 + y_p, 1000 + z_p)
     b_4[23] = (-500  + x_p, 0 + y_p, 2000 + z_p)
-    
 
 
-    
+
+
     main_arr = [b,]
 
     i = 0
@@ -245,7 +239,7 @@ while not finished:
         beta_arr[i] = pol_cor_beta(d[0], d[1], d[2])
         c[i] = out_scr(r[i], alpha_arr[i], beta_arr[i])
         i += 1
-    
+
     i = 0
     while i < 8:
         d = b_2[i]
@@ -254,7 +248,7 @@ while not finished:
         beta_arr[i] = pol_cor_beta(d[0], d[1], d[2])
         c_2[i] = out_scr(r[i], alpha_arr[i], beta_arr[i])
         i += 1
-    
+
     i = 0
     while i < 8:
         d = b_3[i]
@@ -278,15 +272,15 @@ while not finished:
     #field:
 
     polygon(screen, (100, 255, 100), [c_2[0], c_2[1], c_2[3], c_2[2]], 2)
-    
+
     polygon(screen, (255, 255, 255), [c_2[0], c_2[2], c_2[6], c_2[4]], 2)
     polygon(screen, (255, 255, 255), [c_2[1], c_2[3], c_2[7], c_2[5]], 2)
     polygon(screen, (255, 255, 255), [c_2[3], c_2[2], c_2[6], c_2[7]], 2)
 
-    
+
     polygon(screen, (255, 255, 255), [c_3[0], c_3[1], c_3[3], c_3[2]], 2)
     polygon(screen, (255, 255, 255), [c_3[4], c_3[5], c_3[7], c_3[6]], 2)
-    
+
     polygon(screen, (255, 255, 255), [c_4[0],  c_4[1],  c_4[3],  c_4[2]], 2)
     polygon(screen, (255, 255, 255), [c_4[4],  c_4[5],  c_4[7],  c_4[6]], 2)
     polygon(screen, (255, 255, 255), [c_4[8],  c_4[9],  c_4[10], c_4[11]], 2)
@@ -295,22 +289,22 @@ while not finished:
     polygon(screen, (255, 255, 255), [c_4[20], c_4[21], c_4[23], c_4[22]], 2)
 
 
-    
+
     #First cube
     polygon(screen, (255, 0, 0), [(100,100), (200,100), (200,200), (100,200)], 2)
     #polygon(screen, (255, 0, 0), [c[0], c[1], (0,0), (0,200)], 2)
     #polygon(screen, (255, 0, 0), [(1200,0), (1200,200), c[2], c[3]], 2)
-    
+
     polygon(screen, (255, 255, 255), [c[0], c[1], c[2], c[3]], 2)
     polygon(screen, (255, 255, 255), [c[4], c[5], c[6], c[7]], 2)
-    
+
     polygon(screen, (255, 255, 255), [c[0], c[1], c[5], c[4]], 2)
     polygon(screen, (255, 255, 255), [c[2], c[3], c[7], c[6]], 2)
 
     polygon(screen, (255, 0, 0), [c[0], c[3], c[7], c[4]], 2)
     polygon(screen, (255, 255, 255), [c[1], c[2], c[6], c[5]], 2)
 
-    
+
 
     #FIXME:
     q = [0]*8
@@ -339,8 +333,8 @@ while not finished:
     aaline(screen, white, [0, 400], [1200, 400])
 
 
-    
-    
+
+
     pygame.display.update()
     black = (0,0,0)
     screen.fill(black)
